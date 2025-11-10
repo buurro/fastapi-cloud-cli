@@ -116,3 +116,17 @@ def test_archive_respects_fastapicloudignore_unignore(
     with tarfile.open(tar_path, "r") as tar:
         names = tar.getnames()
         assert set(names) == {"main.py", "static/build/style.css"}
+
+
+def test_archive_includes_python_version_file(src_path: Path, tar_path: Path) -> None:
+    (src_path / "main.py").write_text("print('hello')")
+    # (src_path / ".fastapicloudignore").write_text("!.python-version")
+
+    # Create .python-version file
+    (src_path / ".python-version").write_text("3.9")
+
+    archive(src_path, tar_path)
+
+    with tarfile.open(tar_path, "r") as tar:
+        names = tar.getnames()
+        assert ".python-version" in names

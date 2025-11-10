@@ -51,6 +51,7 @@ def archive(path: Path, tar_path: Path) -> Path:
         path,
         should_exclude_entry=_should_exclude_entry,
         additional_ignore_paths=[".fastapicloudignore"],
+        overrides=[".python-version"],
     )
 
     logger.debug("Archive will be created at: %s", tar_path)
