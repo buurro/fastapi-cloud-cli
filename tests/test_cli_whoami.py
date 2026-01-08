@@ -54,6 +54,18 @@ def test_shows_email(logged_in_cli: None, respx_mock: respx.MockRouter) -> None:
 
 
 @pytest.mark.respx(base_url=settings.base_api_url)
+def test_shows_using_api_token(
+    logged_out_cli: None, respx_mock: respx.MockRouter
+) -> None:
+    runner = CliRunner(env={"FASTAPI_CLOUD_TOKEN": "some_token_value"})
+
+    result = runner.invoke(app, ["whoami"])
+
+    assert result.exit_code == 0
+    assert "Using API token from environment variable" in result.output
+
+
+@pytest.mark.respx(base_url=settings.base_api_url)
 def test_handles_read_timeout(
     logged_in_cli: None, respx_mock: respx.MockRouter
 ) -> None:

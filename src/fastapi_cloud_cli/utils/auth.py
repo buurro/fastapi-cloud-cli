@@ -2,6 +2,7 @@ import base64
 import binascii
 import json
 import logging
+import os
 import time
 from typing import Optional
 
@@ -45,6 +46,20 @@ def read_auth_config() -> Optional[AuthConfig]:
 
     logger.debug("Auth config loaded successfully")
     return AuthConfig.model_validate_json(auth_path.read_text(encoding="utf-8"))
+
+
+def get_api_token() -> Optional[str]:
+    logger.debug("Getting API token from environment variable")
+
+    token = os.environ.get("FASTAPI_CLOUD_TOKEN")
+
+    logger.debug(
+        "Using API token from environment variable"
+        if token
+        else "No API token found in environment variable"
+    )
+
+    return token
 
 
 def get_auth_token() -> Optional[str]:

@@ -21,7 +21,7 @@ from rich_toolkit.menu import Option
 from fastapi_cloud_cli.commands.login import login
 from fastapi_cloud_cli.utils.api import APIClient, BuildLogError, TooManyRetriesError
 from fastapi_cloud_cli.utils.apps import AppConfig, get_app_config, write_app_config
-from fastapi_cloud_cli.utils.auth import is_logged_in
+from fastapi_cloud_cli.utils.auth import get_api_token, is_logged_in
 from fastapi_cloud_cli.utils.cli import get_rich_toolkit, handle_http_errors
 
 logger = logging.getLogger(__name__)
@@ -535,7 +535,7 @@ def deploy(
     logger.debug("Deploy path: %s, skip_wait: %s", path, skip_wait)
 
     with get_rich_toolkit() as toolkit:
-        if not is_logged_in():
+        if not is_logged_in() and not get_api_token():
             logger.debug("User not logged in, prompting for login or waitlist")
 
             toolkit.print_title("Welcome to FastAPI Cloud!", tag="FastAPI")

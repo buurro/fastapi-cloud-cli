@@ -5,13 +5,17 @@ from rich import print
 from rich_toolkit.progress import Progress
 
 from fastapi_cloud_cli.utils.api import APIClient
-from fastapi_cloud_cli.utils.auth import is_logged_in
+from fastapi_cloud_cli.utils.auth import get_api_token, is_logged_in
 from fastapi_cloud_cli.utils.cli import handle_http_errors
 
 logger = logging.getLogger(__name__)
 
 
 def whoami() -> Any:
+    if get_api_token():
+        print("⚡ [bold]Using API token from environment variable[/bold]")
+        return
+
     if not is_logged_in():
         print("No credentials found. Use [blue]`fastapi login`[/] to login.")
         return
